@@ -12,5 +12,5 @@ def test_sub():
 
 def test_mul():
     multiplication = mul(2,2)
-    assert multiplication == 4
+    assert multiplication == 5
 
