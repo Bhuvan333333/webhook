@@ -24,7 +24,7 @@ jobs :
           echo "result=$result" >> $GITHUB_OUTPUT
 
       - name : print test
-        run : echo "test output : ${{steps.test.outputs.result}}"
+        run: echo "Test output: ${{ steps.test.outputs.result }}"
 
 
       # - name : docker container
