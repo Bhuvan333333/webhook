@@ -1,0 +1,29 @@
+name : calculator ci
+
+on :
+  push
+
+jobs :
+  webhook:
+    runs-on : 
+      ubuntu-latest
+    env :
+      WEBHOOK_URL = ${{secrets.WEBHOOK_URL}}
+    
+    steps :
+      - name : checkout repository
+        uses : actions/checkout@v4
+
+      - name : Docke image
+        run : docker build -t githubbuild .
+
+      - name : docker container
+        run : docker run --name githubbuild -it githubbuild
+
+      - name : workflow failure
+        if : ${{failure()}}
+        run : |
+          curl -X POST "$WEBHOOK_URL" \
+          -H "Content-Type: application/json" \
+          -d '{"project":"webhook","status":"failed"}'
+
