@@ -17,22 +17,12 @@ jobs :
         id : build
         run : docker build -t githubbuild .
 
-      - name : docker test
+      - name : docker container
         id : test
-        run : |
-          result=$(docker run --rm githubbuild)
-          echo "result=$result" >> $GITHUB_OUTPUT
-
-      - name : print test
-        run: echo "Test output:${{ steps.test.outputs.result }}"
-
-
-      # - name : docker container
-      #   id : test
-      #   run : docker run --name githubrun githubbuild
+        run : docker run --name githubrun githubbuild
 
       - name : workflow failure
-        if: ${{steps.test.outcome == 'failure'}}
+        if : ${{failure() && steps.tests.outcome == "failure"}}
         run : |
           curl -X POST "$WEBHOOK_URL" \
           -H "Content-Type: application/json" \
