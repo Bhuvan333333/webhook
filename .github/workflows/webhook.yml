@@ -20,7 +20,7 @@ jobs :
       - name : docker test
         id : test
         run : |
-          result=$(docker run githubbuild)
+          result=$(docker run --rm githubbuild)
           echo "result=$result" >> $GITHUB_OUTPUT
 
       - name : print test
