@@ -22,7 +22,7 @@ jobs :
         run : docker run --name githubrun githubbuild
 
       - name : workflow failure
-        if : ${{failure() && steps.tests.outcome == "failure"}}
+        if: ${{failure() && steps.tests.outcome == "failure"}}
         run : |
           curl -X POST "$WEBHOOK_URL" \
           -H "Content-Type: application/json" \
