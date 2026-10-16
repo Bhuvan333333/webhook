@@ -14,13 +14,25 @@ jobs :
         uses : actions/checkout@v4
 
       - name : Docke image
+        id : build
         run : docker build -t githubbuild .
 
-      - name : docker container
-        run : docker run --name githubrun githubbuild
+      - name : docker test
+        id : test
+        run : |
+          result = $(docker run githubbuild)
+          echo "result=$result" >> $GITHUB_OUTPUT
+          
+      - name : print test
+        run : echo "test output : ${{steps.test.outputs.result}}"
+
+
+      # - name : docker container
+      #   id : test
+      #   run : docker run --name githubrun githubbuild
 
       - name : workflow failure
-        if : ${{failure()}}
+        if : ${{failure() && steps.test.outcome == "failure"}}
         run : |
           curl -X POST "$WEBHOOK_URL" \
           -H "Content-Type: application/json" \
